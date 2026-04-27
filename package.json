@@ -2,6 +2,7 @@
   "name": "herb-game-proxy",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "vercel-build": "echo 'No build needed'"
   },
