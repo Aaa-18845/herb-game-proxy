@@ -11,6 +11,7 @@ export default async function handler(req, res) {
     const apiUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
 
     try {
+        const { prompt } = req.body;
         const response = await fetch(apiUrl, {
             method: "POST",
             headers: {
@@ -21,7 +22,7 @@ export default async function handler(req, res) {
                 model: "qwen-max",
                 messages: [
                     { role: "system", content: "你是中医大师，只输出合法JSON，不要有任何额外解释。" },
-                    { role: "user", content: req.body.prompt || "生成5道中医药选择题，严格JSON格式。" }
+                    { role: "user", content: prompt || "生成5道中医药选择题，严格JSON格式。" }
                 ],
                 temperature: 0.7
             })
@@ -37,7 +38,7 @@ export default async function handler(req, res) {
         const jsonMatch = content.match(/\{.*\}/s);
         const cleanJson = jsonMatch ? jsonMatch[0] : content;
         const parsed = JSON.parse(cleanJson);
-        
+
         return res.status(200).json({ questions: parsed.questions });
     } catch (error) {
         return res.status(500).json({ error: error.message });
